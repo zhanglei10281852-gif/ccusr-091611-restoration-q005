@@ -1,0 +1,8 @@
+{
+  "project": "bronze-electrochemical-safety",
+  "treatment_states": ["prepared", "ramping", "steady", "paused", "locked", "rinsing", "completed"],
+  "telemetry_types": ["current", "voltage", "chloride", "temperature", "heartbeat"],
+  "command_types": ["start", "pause", "resume", "emergency_stop", "begin_rinse", "finish"],
+  "required_telemetry_fields": ["message_id", "channel_id", "signal", "value", "unit", "observed_at", "received_at"],
+  "interlock_levels": ["advisory", "operator_reset", "supervisor_reset", "emergency_lock"]
+}
