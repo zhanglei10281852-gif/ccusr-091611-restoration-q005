@@ -1,0 +1,4 @@
+[
+  {"message_id":"msg-81","channel_id":"cell-3","signal":"current","value":0.42,"unit":"A","observed_at":"2026-09-15T21:00:02+08:00","received_at":"2026-09-15T21:00:03+08:00"},
+  {"message_id":"msg-80","channel_id":"cell-3","signal":"current","value":0.51,"unit":"A","observed_at":"2026-09-15T21:00:01+08:00","received_at":"2026-09-15T21:00:05+08:00"}
+]
