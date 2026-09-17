@@ -2,7 +2,25 @@
   "project": "bronze-electrochemical-safety",
   "treatment_states": ["prepared", "ramping", "steady", "paused", "locked", "rinsing", "completed"],
   "telemetry_types": ["current", "voltage", "chloride", "temperature", "heartbeat"],
-  "command_types": ["start", "pause", "resume", "emergency_stop", "begin_rinse", "finish"],
+  "command_types": [
+    "precheck",
+    "start",
+    "pause",
+    "resume",
+    "acknowledge",
+    "supervisor_unlock",
+    "enter_maintenance",
+    "exit_maintenance",
+    "emergency_stop",
+    "begin_rinse",
+    "finish"
+  ],
   "required_telemetry_fields": ["message_id", "channel_id", "signal", "value", "unit", "observed_at", "received_at"],
-  "interlock_levels": ["advisory", "operator_reset", "supervisor_reset", "emergency_lock"]
+  "interlock_levels": ["advisory", "operator_reset", "supervisor_reset", "emergency_lock"],
+  "operator_roles": ["operator", "supervisor"],
+  "notes": [
+    "每条命令必须带 idempotency_key；同键重放返回首次结果，不重复执行设备动作。",
+    "acknowledge 只能清除 advisory/operator_reset；locked 通道必须由 supervisor_unlock 解除。",
+    "emergency_stop 每处理回合只动作一次，重复请求只返回已挂起的停机事件。"
+  ]
 }

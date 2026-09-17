@@ -1,0 +1,38 @@
+{
+  "protocol_version": "bronze-psu-1.0",
+  "transport": "服务通过串口/网口网关向电源与循环泵下发帧；本服务只依赖下列逻辑帧，网关负责物理重传。",
+  "downlink_frames": [
+    {"frame": "ENABLE_OUTPUT", "args": ["channel_id", "current_limit_a"], "issued_in": ["ramping"],
+     "effect": "接通器物通道电源并按方案限流；重复帧（同 idempotency_key）被网关丢弃。"},
+    {"frame": "HOLD_CURRENT", "args": ["channel_id", "setpoint_a"], "issued_in": ["steady"],
+     "effect": "恒流保持，随阈值曲线微调。"},
+    {"frame": "SUSPEND_OUTPUT", "args": ["channel_id"], "issued_in": ["paused", "advisory", "operator_reset"],
+     "effect": "软暂停：关断输出但保持溶液循环与监测。"},
+    {"frame": "START_RINSE", "args": ["channel_id"], "issued_in": ["rinsing"],
+     "effect": "启动去离子水冲洗回路。"},
+    {"frame": "STOP_RINSE", "args": ["channel_id"], "issued_in": ["completed"],
+     "effect": "停止冲洗泵。"},
+    {"frame": "FORCE_RELAYS_OPEN", "args": ["channel_id"], "issued_in": ["locked"],
+     "effect": "硬联锁：断开输出继电器并闭锁，必须 UNLOCK 才能再合闸。"},
+    {"frame": "UNLOCK_RELAYS", "args": ["channel_id", "supervisor_badge"], "issued_in": ["prepared"],
+     "effect": "主管解锁后继电器闭锁解除，通道才能重新预检。"}
+  ],
+  "uplink_signals": {
+    "current": {"unit": "A", "normal_range": [0.0, 1.20], "source": "电源直流采样"},
+    "voltage": {"unit": "V", "normal_range": [0.0, 24.0], "source": "电源极间电压"},
+    "chloride": {"unit": "mg/L", "normal_range": [0.0, 1200.0], "source": "出口溶液氯离子选择电极"},
+    "temperature": {"unit": "C", "normal_range": [10.0, 45.0], "source": "溶液 PT100"},
+    "heartbeat": {"unit": "status", "normal_range": [1, 1], "source": "采集网关看门狗，value=1 表示存活"}
+  },
+  "ordering_rules": [
+    "遥测以 observed_at（采集时间）作为处理顺序依据，received_at 仅用于延迟与失联判定。",
+    "observed_at 早于通道已处理水位（高水位 mark）的消息直接丢弃，不回退任何处理阶段。",
+    "message_id 去重表在恢复时从事件流重建；重复消息任何情况下不得产生第二次效果。",
+    "网关心跳中断超过 silence_timeout_s：自动 SUSPEND_OUTPUT 并升联锁（见 recipes）。",
+    "维护模式期间不下发任何带电帧；失联在维护模式下只记录不联锁（见 maintenance_policy）。"
+  ],
+  "safety_modes": {
+    "normal": "全量监测与联锁。",
+    "maintenance": "操作员持牌进入：输出必须已暂停；忽略传感器失联告警，但阈值越限仍然联锁；退出需再次持牌且通过预检。"
+  }
+}

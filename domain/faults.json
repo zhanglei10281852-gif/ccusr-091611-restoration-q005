@@ -1,0 +1,93 @@
+{
+  "fault_library_version": "1.0",
+  "description": "故障样例：每个样例给出遥测/操作序列与期望的安全处置，测试套件据此重放。时间为相对序列秒，observed_at 由模拟时钟生成。",
+  "scenarios": [
+    {
+      "scenario_id": "night-incident-current-spike",
+      "inspired_by": "2026-09-15 夜间除氯记录：电流短时越过安全线后自行恢复，无确认记录",
+      "start_state": "steady",
+      "events": [
+        {"t_s": 0, "kind": "telemetry", "signal": "current", "value": 0.80},
+        {"t_s": 2, "kind": "telemetry", "signal": "current", "value": 1.24},
+        {"t_s": 4, "kind": "telemetry", "signal": "current", "value": 0.81}
+      ],
+      "expect": {
+        "final_state": "locked",
+        "interlock": "supervisor_reset",
+        "device_frames": ["FORCE_RELAYS_OPEN"],
+        "operator_ack_clears": false,
+        "note": "即使读数自行恢复，阶段不得回退到 steady；普通确认无效，须主管解锁。"
+      }
+    },
+    {
+      "scenario_id": "extreme-overcurrent-emergency",
+      "start_state": "steady",
+      "events": [
+        {"t_s": 0, "kind": "telemetry", "signal": "current", "value": 1.40}
+      ],
+      "expect": {
+        "final_state": "locked",
+        "interlock": "emergency_lock",
+        "device_frames": ["FORCE_RELAYS_OPEN"],
+        "permanent_for_round": true
+      }
+    },
+    {
+      "scenario_id": "sensor-silence-while-energized",
+      "start_state": "steady",
+      "events": [
+        {"t_s": 0, "kind": "telemetry", "signal": "heartbeat", "value": 1},
+        {"t_s": 75, "kind": "clock_tick", "advance_s": 75}
+      ],
+      "expect": {
+        "final_state": "paused",
+        "interlock": "operator_reset",
+        "device_frames": ["SUSPEND_OUTPUT"],
+        "reason_contains": "silence"
+      }
+    },
+    {
+      "scenario_id": "sensor-silence-during-maintenance",
+      "start_state": "paused",
+      "events": [
+        {"t_s": 0, "kind": "command", "command": "enter_maintenance"},
+        {"t_s": 600, "kind": "clock_tick", "advance_s": 600}
+      ],
+      "expect": {
+        "final_state": "paused",
+        "mode": "maintenance",
+        "interlock": null,
+        "device_frames_during_silence": [],
+        "note": "维护模式下失联只记录，不暂停、不联锁、不下发帧。"
+      }
+    },
+    {
+      "scenario_id": "estop-network-retry",
+      "start_state": "steady",
+      "events": [
+        {"t_s": 0, "kind": "command", "command": "emergency_stop", "idempotency_key": "estop-1"},
+        {"t_s": 1, "kind": "command", "command": "emergency_stop", "idempotency_key": "estop-1"},
+        {"t_s": 2, "kind": "command", "command": "emergency_stop", "idempotency_key": "estop-2"}
+      ],
+      "expect": {
+        "final_state": "locked",
+        "interlock": "emergency_lock",
+        "device_frame_count": {"FORCE_RELAYS_OPEN": 1},
+        "note": "无论同键重试还是换键重试，硬停机帧在一个处理回合内只下发一次。"
+      }
+    },
+    {
+      "scenario_id": "out-of-order-no-regression",
+      "start_state": "steady",
+      "events": [
+        {"t_s": 10, "kind": "telemetry", "signal": "current", "value": 1.24},
+        {"t_s": 11, "kind": "telemetry", "signal": "current", "value": 0.80, "observed_t_s": 9}
+      ],
+      "expect": {
+        "final_state": "locked",
+        "dropped_messages": 1,
+        "note": "迟到的正常读数不得把 locked 回退。"
+      }
+    }
+  ]
+}

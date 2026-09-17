@@ -1,0 +1,50 @@
+{
+  "calibration_schema_version": "1.0",
+  "calibrations": [
+    {
+      "record_id": "cal-2026-09-01-psu",
+      "instrument": "直流电源 PS-7201 #04",
+      "channel_id": "cell-3",
+      "signal": "current",
+      "points": [
+        {"standard_a": 0.20, "indicated_a": 0.205},
+        {"standard_a": 0.50, "indicated_a": 0.508},
+        {"standard_a": 1.00, "indicated_a": 1.012},
+        {"standard_a": 1.50, "indicated_a": 1.518}
+      ],
+      "gain": 0.9886,
+      "offset_a": -0.0024,
+      "valid_from": "2026-09-01T09:00:00+08:00",
+      "valid_until": "2026-12-01T09:00:00+08:00",
+      "calibrated_by": "L. Wei",
+      "notes": "夜间记录 msg-80 示值 0.51 A 经该校正：0.51*0.9886-0.0024=0.502 A。"
+    },
+    {
+      "record_id": "cal-2026-09-01-cl",
+      "instrument": "氯离子选择电极 ISE-Cl #11",
+      "channel_id": "cell-3",
+      "signal": "chloride",
+      "standards_mg_l": [10, 100, 500, 1000],
+      "gain": 1.0,
+      "offset_mg_l": 0.0,
+      "valid_from": "2026-09-01T09:30:00+08:00",
+      "valid_until": "2026-11-15T09:30:00+08:00",
+      "calibrated_by": "M. Chen"
+    },
+    {
+      "record_id": "cal-2026-08-28-temp",
+      "instrument": "PT100 探头 T-22",
+      "channel_id": "cell-3",
+      "signal": "temperature",
+      "points": [
+        {"standard_c": 20.0, "indicated_c": 20.1},
+        {"standard_c": 40.0, "indicated_c": 40.2}
+      ],
+      "gain": 0.995,
+      "offset_c": 0.0,
+      "valid_from": "2026-08-28T14:00:00+08:00",
+      "valid_until": "2026-11-28T14:00:00+08:00",
+      "calibrated_by": "L. Wei"
+    }
+  ]
+}

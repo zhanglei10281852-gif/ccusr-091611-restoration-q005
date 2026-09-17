@@ -1,0 +1,66 @@
+{
+  "recipe_schema_version": "1.0",
+  "recipes": [
+    {
+      "recipe_id": "recipe-bronze-standard",
+      "artifact_name": "标准青铜礼器（薄壁，含可溶性氯盐）",
+      "precheck": {
+        "required_readings": ["current", "voltage", "chloride", "temperature", "heartbeat"],
+        "temperature_window_c": [15.0, 35.0],
+        "chloride_initial_max_mg_l": 1200.0,
+        "insulation_resistance_min_kohm": 500,
+        "window_seconds": 120
+      },
+      "ramp": {
+        "duration_s": 1800,
+        "start_current_a": 0.10,
+        "target_current_a": 0.80,
+        "current_tolerance_a": 0.05,
+        "instant_current_hard_max_a": 1.00
+      },
+      "steady": {
+        "current_setpoint_a": 0.80,
+        "current_warn_a": 1.00,
+        "current_operator_reset_a": 1.20,
+        "current_emergency_lock_a": 1.35,
+        "voltage_warn_v": 20.0,
+        "voltage_operator_reset_v": 24.0,
+        "voltage_emergency_lock_v": 27.0,
+        "temperature_warn_c": 38.0,
+        "temperature_operator_reset_c": 42.0,
+        "temperature_emergency_lock_c": 45.0,
+        "chloride_rate_warn_mg_l_per_h": 600.0,
+        "completion_min_h": 24,
+        "completion_chloride_mg_l": 50.0,
+        "completion_window_s": 3600
+      },
+      "rinse": {
+        "duration_s": 3600,
+        "temperature_max_c": 35.0,
+        "conductivity_end_us_cm": 20
+      },
+      "timeouts": {
+        "precheck_grace_s": 180,
+        "ramp_max_s": 2400,
+        "steady_no_telemetry_s": 90,
+        "paused_max_s": 7200,
+        "rinse_max_s": 5400,
+        "silence_s": 60,
+        "heartbeat_interval_s": 15
+      }
+    }
+  ],
+  "interlock_policy": {
+    "advisory": "单点轻度越限（warn）：记录、通知；不自动改变状态，操作员确认后清除。",
+    "operator_reset": "明显越限：自动暂停（ramping/steady -> paused 并挂起 SUSPEND_OUTPUT），须操作员现场确认 resume；普通确认只在越限消失后生效。",
+    "supervisor_reset": "短时但严重越限（如夜间记录中电流越过安全线）或重复 operator_reset：通道 locked、FORCE_RELAYS_OPEN；操作员 acknowledge 无法解除，仅主管 supervisor_unlock 可解除。",
+    "emergency_lock": "持续/极端越限（电流电压温度任一达 emergency_lock，或失联叠加带电状态）：永久闭锁本处理回合，只能 emergency_stop 后结束，禁止再合闸。"
+  },
+  "maintenance_policy": {
+    "allowed_from_states": ["paused", "prepared"],
+    "effect": "进入维护：不下发任何带电帧；传感器 silence 不联锁、不自动暂停（维护预期断电断传感器）。",
+    "threshold_still_active": true,
+    "exit": "退出维护需重新预检；维护期间若出现过越限数据，退出被拒绝，要求主管解锁。",
+    "max_maintenance_s": 14400
+  }
+}
