@@ -1,0 +1,111 @@
+{
+  "description": "故障样例：供测试与演示回放。时间均为 +08:00；auto_heartbeat 开启后由回放器按间隔自动注入心跳。",
+  "scenarios": [
+    {
+      "name": "overnight_current_spike",
+      "description": "夜间稳态期间电流短时越过严重线后回落：通道紧急锁定，普通确认不能解除，主管复位后进入暂停",
+      "steps": [
+        {"set_clock": "2026-09-15T21:00:00+08:00"},
+        {"plan": {"plan_id": "plan-s1", "artifact_id": "bronze-ding-01", "artifact_name": "商代青铜鼎", "channel_id": "cell-3", "target_current_A": 2.0, "ramp_rate_A_per_s": 0.05, "steady_band_A": 0.1, "chloride_target_mg_L": 0.5, "settle_s": 10, "ramp_timeout_s": 120, "rinse_min_s": 60, "paused_max_s": 1800}},
+        {"auto_heartbeat": {"channel_id": "cell-3", "every_s": 5}},
+        {"telemetry": {"message_id": "s1-c-001", "channel_id": "cell-3", "signal": "current", "value": 0.0, "unit": "A", "observed_at": "2026-09-15T21:00:01+08:00", "received_at": "2026-09-15T21:00:01+08:00"}},
+        {"telemetry": {"message_id": "s1-v-001", "channel_id": "cell-3", "signal": "voltage", "value": 8.1, "unit": "V", "observed_at": "2026-09-15T21:00:02+08:00", "received_at": "2026-09-15T21:00:02+08:00"}},
+        {"telemetry": {"message_id": "s1-cl-001", "channel_id": "cell-3", "signal": "chloride", "value": 1.8, "unit": "mg/L", "observed_at": "2026-09-15T21:00:03+08:00", "received_at": "2026-09-15T21:00:03+08:00"}},
+        {"telemetry": {"message_id": "s1-t-001", "channel_id": "cell-3", "signal": "temperature", "value": 24.1, "unit": "C", "observed_at": "2026-09-15T21:00:04+08:00", "received_at": "2026-09-15T21:00:04+08:00"}},
+        {"command": {"type": "start", "channel_id": "cell-3", "actor": "op-chen", "role": "operator", "idempotency_key": "s1-start", "at": "2026-09-15T21:00:05+08:00"}},
+        {"telemetry": {"message_id": "s1-c-002", "channel_id": "cell-3", "signal": "current", "value": 0.5, "unit": "A", "observed_at": "2026-09-15T21:00:15+08:00", "received_at": "2026-09-15T21:00:15+08:00"}},
+        {"telemetry": {"message_id": "s1-c-003", "channel_id": "cell-3", "signal": "current", "value": 1.0, "unit": "A", "observed_at": "2026-09-15T21:00:25+08:00", "received_at": "2026-09-15T21:00:25+08:00"}},
+        {"telemetry": {"message_id": "s1-v-002", "channel_id": "cell-3", "signal": "voltage", "value": 9.2, "unit": "V", "observed_at": "2026-09-15T21:00:25+08:00", "received_at": "2026-09-15T21:00:25+08:00"}},
+        {"telemetry": {"message_id": "s1-c-004", "channel_id": "cell-3", "signal": "current", "value": 1.5, "unit": "A", "observed_at": "2026-09-15T21:00:35+08:00", "received_at": "2026-09-15T21:00:35+08:00"}},
+        {"telemetry": {"message_id": "s1-c-005", "channel_id": "cell-3", "signal": "current", "value": 2.0, "unit": "A", "observed_at": "2026-09-15T21:00:45+08:00", "received_at": "2026-09-15T21:00:45+08:00"}},
+        {"telemetry": {"message_id": "s1-t-002", "channel_id": "cell-3", "signal": "temperature", "value": 26.0, "unit": "C", "observed_at": "2026-09-15T21:00:45+08:00", "received_at": "2026-09-15T21:00:45+08:00"}},
+        {"telemetry": {"message_id": "s1-c-006", "channel_id": "cell-3", "signal": "current", "value": 2.0, "unit": "A", "observed_at": "2026-09-15T21:00:55+08:00", "received_at": "2026-09-15T21:00:55+08:00"}},
+        {"telemetry": {"message_id": "s1-cl-002", "channel_id": "cell-3", "signal": "chloride", "value": 1.2, "unit": "mg/L", "observed_at": "2026-09-15T21:00:55+08:00", "received_at": "2026-09-15T21:00:55+08:00"}},
+        {"telemetry": {"message_id": "s1-c-007", "channel_id": "cell-3", "signal": "current", "value": 2.0, "unit": "A", "observed_at": "2026-09-15T21:01:05+08:00", "received_at": "2026-09-15T21:01:05+08:00"}},
+        {"telemetry": {"message_id": "s1-c-008", "channel_id": "cell-3", "signal": "current", "value": 3.42, "unit": "A", "observed_at": "2026-09-15T21:01:20+08:00", "received_at": "2026-09-15T21:01:20+08:00"}},
+        {"telemetry": {"message_id": "s1-c-009", "channel_id": "cell-3", "signal": "current", "value": 0.4, "unit": "A", "observed_at": "2026-09-15T21:01:25+08:00", "received_at": "2026-09-15T21:01:25+08:00"}},
+        {"action": {"type": "acknowledge_interlock", "channel_id": "cell-3", "actor": "op-chen", "role": "operator", "idempotency_key": "s1-ack-1", "at": "2026-09-15T21:02:00+08:00"}},
+        {"action": {"type": "supervisor_reset", "channel_id": "cell-3", "actor": "sup-wang", "role": "supervisor", "idempotency_key": "s1-reset-1", "at": "2026-09-15T21:03:00+08:00"}},
+        {"expect": {"phase": "paused", "open_interlocks": [], "effects_count": 1, "maintenance": false}}
+      ]
+    },
+    {
+      "name": "sensor_silence",
+      "description": "传感器失联：先自动保护性暂停并给操作员级联锁；心跳恢复后确认可继续；长时间失联升级为主管级锁定",
+      "steps": [
+        {"set_clock": "2026-09-16T08:00:00+08:00"},
+        {"plan": {"plan_id": "plan-s2", "artifact_id": "bronze-jue-02", "artifact_name": "青铜爵", "channel_id": "cell-3", "target_current_A": 2.0, "ramp_rate_A_per_s": 0.05, "steady_band_A": 0.1, "chloride_target_mg_L": 0.5, "settle_s": 10, "ramp_timeout_s": 120, "rinse_min_s": 60, "paused_max_s": 1800}},
+        {"auto_heartbeat": {"channel_id": "cell-3", "every_s": 5}},
+        {"telemetry": {"message_id": "s2-c-001", "channel_id": "cell-3", "signal": "current", "value": 0.0, "unit": "A", "observed_at": "2026-09-16T08:00:01+08:00", "received_at": "2026-09-16T08:00:01+08:00"}},
+        {"telemetry": {"message_id": "s2-v-001", "channel_id": "cell-3", "signal": "voltage", "value": 8.0, "unit": "V", "observed_at": "2026-09-16T08:00:02+08:00", "received_at": "2026-09-16T08:00:02+08:00"}},
+        {"telemetry": {"message_id": "s2-cl-001", "channel_id": "cell-3", "signal": "chloride", "value": 1.6, "unit": "mg/L", "observed_at": "2026-09-16T08:00:03+08:00", "received_at": "2026-09-16T08:00:03+08:00"}},
+        {"telemetry": {"message_id": "s2-t-001", "channel_id": "cell-3", "signal": "temperature", "value": 23.5, "unit": "C", "observed_at": "2026-09-16T08:00:04+08:00", "received_at": "2026-09-16T08:00:04+08:00"}},
+        {"command": {"type": "start", "channel_id": "cell-3", "actor": "op-chen", "role": "operator", "idempotency_key": "s2-start", "at": "2026-09-16T08:00:05+08:00"}},
+        {"telemetry": {"message_id": "s2-c-002", "channel_id": "cell-3", "signal": "current", "value": 0.5, "unit": "A", "observed_at": "2026-09-16T08:00:15+08:00", "received_at": "2026-09-16T08:00:15+08:00"}},
+        {"telemetry": {"message_id": "s2-c-003", "channel_id": "cell-3", "signal": "current", "value": 1.0, "unit": "A", "observed_at": "2026-09-16T08:00:25+08:00", "received_at": "2026-09-16T08:00:25+08:00"}},
+        {"telemetry": {"message_id": "s2-c-004", "channel_id": "cell-3", "signal": "current", "value": 1.5, "unit": "A", "observed_at": "2026-09-16T08:00:35+08:00", "received_at": "2026-09-16T08:00:35+08:00"}},
+        {"telemetry": {"message_id": "s2-c-005", "channel_id": "cell-3", "signal": "current", "value": 2.0, "unit": "A", "observed_at": "2026-09-16T08:00:45+08:00", "received_at": "2026-09-16T08:00:45+08:00"}},
+        {"telemetry": {"message_id": "s2-c-006", "channel_id": "cell-3", "signal": "current", "value": 2.0, "unit": "A", "observed_at": "2026-09-16T08:00:55+08:00", "received_at": "2026-09-16T08:00:55+08:00"}},
+        {"auto_heartbeat": null, "at": "2026-09-16T08:01:00+08:00"},
+        {"tick": {"at": "2026-09-16T08:01:20+08:00"}},
+        {"telemetry": {"message_id": "s2-hb-r1", "channel_id": "cell-3", "signal": "heartbeat", "value": 1, "unit": "none", "observed_at": "2026-09-16T08:01:30+08:00", "received_at": "2026-09-16T08:01:30+08:00"}},
+        {"action": {"type": "acknowledge_interlock", "channel_id": "cell-3", "actor": "op-chen", "role": "operator", "idempotency_key": "s2-ack-1", "at": "2026-09-16T08:01:35+08:00"}},
+        {"command": {"type": "resume", "channel_id": "cell-3", "actor": "op-chen", "role": "operator", "idempotency_key": "s2-resume-1", "at": "2026-09-16T08:01:40+08:00"}},
+        {"tick": {"at": "2026-09-16T08:11:40+08:00"}},
+        {"tick": {"at": "2026-09-16T08:22:00+08:00"}},
+        {"expect": {"phase": "locked", "open_interlocks": ["sensor_lost", "sensor_lost_prolonged"], "maintenance": false}}
+      ]
+    },
+    {
+      "name": "estop_network_retry",
+      "description": "紧急停机在网络抖动下重试：同一幂等键只执行一次；已锁定后新的急停键不再产生重复效果",
+      "steps": [
+        {"set_clock": "2026-09-16T14:00:00+08:00"},
+        {"plan": {"plan_id": "plan-s3", "artifact_id": "bronze-gu-03", "artifact_name": "青铜觚", "channel_id": "cell-3", "target_current_A": 2.0, "ramp_rate_A_per_s": 0.05, "steady_band_A": 0.1, "chloride_target_mg_L": 0.5, "settle_s": 10, "ramp_timeout_s": 120, "rinse_min_s": 60, "paused_max_s": 1800}},
+        {"auto_heartbeat": {"channel_id": "cell-3", "every_s": 5}},
+        {"telemetry": {"message_id": "s3-c-001", "channel_id": "cell-3", "signal": "current", "value": 0.0, "unit": "A", "observed_at": "2026-09-16T14:00:01+08:00", "received_at": "2026-09-16T14:00:01+08:00"}},
+        {"telemetry": {"message_id": "s3-v-001", "channel_id": "cell-3", "signal": "voltage", "value": 8.2, "unit": "V", "observed_at": "2026-09-16T14:00:02+08:00", "received_at": "2026-09-16T14:00:02+08:00"}},
+        {"telemetry": {"message_id": "s3-cl-001", "channel_id": "cell-3", "signal": "chloride", "value": 1.7, "unit": "mg/L", "observed_at": "2026-09-16T14:00:03+08:00", "received_at": "2026-09-16T14:00:03+08:00"}},
+        {"telemetry": {"message_id": "s3-t-001", "channel_id": "cell-3", "signal": "temperature", "value": 24.0, "unit": "C", "observed_at": "2026-09-16T14:00:04+08:00", "received_at": "2026-09-16T14:00:04+08:00"}},
+        {"command": {"type": "start", "channel_id": "cell-3", "actor": "op-chen", "role": "operator", "idempotency_key": "s3-start", "at": "2026-09-16T14:00:05+08:00"}},
+        {"telemetry": {"message_id": "s3-c-002", "channel_id": "cell-3", "signal": "current", "value": 0.5, "unit": "A", "observed_at": "2026-09-16T14:00:15+08:00", "received_at": "2026-09-16T14:00:15+08:00"}},
+        {"telemetry": {"message_id": "s3-c-003", "channel_id": "cell-3", "signal": "current", "value": 1.0, "unit": "A", "observed_at": "2026-09-16T14:00:25+08:00", "received_at": "2026-09-16T14:00:25+08:00"}},
+        {"telemetry": {"message_id": "s3-c-004", "channel_id": "cell-3", "signal": "current", "value": 1.5, "unit": "A", "observed_at": "2026-09-16T14:00:35+08:00", "received_at": "2026-09-16T14:00:35+08:00"}},
+        {"telemetry": {"message_id": "s3-c-005", "channel_id": "cell-3", "signal": "current", "value": 2.0, "unit": "A", "observed_at": "2026-09-16T14:00:45+08:00", "received_at": "2026-09-16T14:00:45+08:00"}},
+        {"telemetry": {"message_id": "s3-c-006", "channel_id": "cell-3", "signal": "current", "value": 2.0, "unit": "A", "observed_at": "2026-09-16T14:00:55+08:00", "received_at": "2026-09-16T14:00:55+08:00"}},
+        {"command": {"type": "emergency_stop", "channel_id": "cell-3", "actor": "op-chen", "role": "operator", "idempotency_key": "s3-estop", "at": "2026-09-16T14:01:10+08:00"}},
+        {"command": {"type": "emergency_stop", "channel_id": "cell-3", "actor": "op-chen", "role": "operator", "idempotency_key": "s3-estop", "at": "2026-09-16T14:01:11+08:00"}},
+        {"command": {"type": "emergency_stop", "channel_id": "cell-3", "actor": "op-chen", "role": "operator", "idempotency_key": "s3-estop-2", "at": "2026-09-16T14:01:12+08:00"}},
+        {"expect": {"phase": "locked", "open_interlocks": ["emergency_stop"], "effects_count": 1, "maintenance": false}}
+      ]
+    },
+    {
+      "name": "maintenance_window",
+      "description": "维护模式：计划性进入后暂停失联监测且阻塞工艺命令；退出后立即恢复安全评估",
+      "steps": [
+        {"set_clock": "2026-09-17T09:00:00+08:00"},
+        {"plan": {"plan_id": "plan-s4", "artifact_id": "bronze-yi-04", "artifact_name": "青铜匜", "channel_id": "cell-3", "target_current_A": 2.0, "ramp_rate_A_per_s": 0.05, "steady_band_A": 0.1, "chloride_target_mg_L": 0.5, "settle_s": 10, "ramp_timeout_s": 120, "rinse_min_s": 60, "paused_max_s": 1800}},
+        {"auto_heartbeat": {"channel_id": "cell-3", "every_s": 5}},
+        {"telemetry": {"message_id": "s4-c-001", "channel_id": "cell-3", "signal": "current", "value": 0.0, "unit": "A", "observed_at": "2026-09-17T09:00:01+08:00", "received_at": "2026-09-17T09:00:01+08:00"}},
+        {"telemetry": {"message_id": "s4-v-001", "channel_id": "cell-3", "signal": "voltage", "value": 8.0, "unit": "V", "observed_at": "2026-09-17T09:00:02+08:00", "received_at": "2026-09-17T09:00:02+08:00"}},
+        {"telemetry": {"message_id": "s4-cl-001", "channel_id": "cell-3", "signal": "chloride", "value": 1.5, "unit": "mg/L", "observed_at": "2026-09-17T09:00:03+08:00", "received_at": "2026-09-17T09:00:03+08:00"}},
+        {"telemetry": {"message_id": "s4-t-001", "channel_id": "cell-3", "signal": "temperature", "value": 23.8, "unit": "C", "observed_at": "2026-09-17T09:00:04+08:00", "received_at": "2026-09-17T09:00:04+08:00"}},
+        {"command": {"type": "start", "channel_id": "cell-3", "actor": "op-chen", "role": "operator", "idempotency_key": "s4-start", "at": "2026-09-17T09:00:05+08:00"}},
+        {"telemetry": {"message_id": "s4-c-002", "channel_id": "cell-3", "signal": "current", "value": 0.5, "unit": "A", "observed_at": "2026-09-17T09:00:15+08:00", "received_at": "2026-09-17T09:00:15+08:00"}},
+        {"telemetry": {"message_id": "s4-c-003", "channel_id": "cell-3", "signal": "current", "value": 1.0, "unit": "A", "observed_at": "2026-09-17T09:00:25+08:00", "received_at": "2026-09-17T09:00:25+08:00"}},
+        {"telemetry": {"message_id": "s4-c-004", "channel_id": "cell-3", "signal": "current", "value": 1.5, "unit": "A", "observed_at": "2026-09-17T09:00:35+08:00", "received_at": "2026-09-17T09:00:35+08:00"}},
+        {"telemetry": {"message_id": "s4-c-005", "channel_id": "cell-3", "signal": "current", "value": 2.0, "unit": "A", "observed_at": "2026-09-17T09:00:45+08:00", "received_at": "2026-09-17T09:00:45+08:00"}},
+        {"telemetry": {"message_id": "s4-c-006", "channel_id": "cell-3", "signal": "current", "value": 2.0, "unit": "A", "observed_at": "2026-09-17T09:00:55+08:00", "received_at": "2026-09-17T09:00:55+08:00"}},
+        {"command": {"type": "pause", "channel_id": "cell-3", "actor": "op-chen", "role": "operator", "idempotency_key": "s4-pause", "at": "2026-09-17T09:01:00+08:00"}},
+        {"action": {"type": "enter_maintenance", "channel_id": "cell-3", "actor": "sup-wang", "role": "supervisor", "idempotency_key": "s4-maint-1", "at": "2026-09-17T09:01:10+08:00"}},
+        {"auto_heartbeat": null, "at": "2026-09-17T09:01:10+08:00"},
+        {"command": {"type": "resume", "channel_id": "cell-3", "actor": "op-chen", "role": "operator", "idempotency_key": "s4-resume-denied", "at": "2026-09-17T09:01:20+08:00"}},
+        {"tick": {"at": "2026-09-17T11:01:30+08:00"}},
+        {"action": {"type": "exit_maintenance", "channel_id": "cell-3", "actor": "sup-wang", "role": "supervisor", "idempotency_key": "s4-maint-2", "at": "2026-09-17T11:01:40+08:00"}},
+        {"telemetry": {"message_id": "s4-hb-r1", "channel_id": "cell-3", "signal": "heartbeat", "value": 1, "unit": "none", "observed_at": "2026-09-17T11:01:50+08:00", "received_at": "2026-09-17T11:01:50+08:00"}},
+        {"action": {"type": "acknowledge_interlock", "channel_id": "cell-3", "actor": "op-chen", "role": "operator", "idempotency_key": "s4-ack-1", "at": "2026-09-17T11:01:55+08:00"}},
+        {"expect": {"phase": "paused", "open_interlocks": [], "maintenance": false}}
+      ]
+    }
+  ]
+}

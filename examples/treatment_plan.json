@@ -1,0 +1,14 @@
+{
+  "plan_id": "plan-ding-01",
+  "artifact_id": "bronze-ding-01",
+  "artifact_name": "商代青铜鼎",
+  "channel_id": "cell-3",
+  "target_current_A": 2.0,
+  "ramp_rate_A_per_s": 0.05,
+  "steady_band_A": 0.1,
+  "chloride_target_mg_L": 0.5,
+  "settle_s": 10,
+  "ramp_timeout_s": 120,
+  "rinse_min_s": 60,
+  "paused_max_s": 1800
+}

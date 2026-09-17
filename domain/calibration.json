@@ -1,0 +1,10 @@
+{
+  "records": [
+    {"channel_id": "cell-3", "signal": "current", "gain": 1.0, "offset": 0.0, "calibrated_at": "2026-08-01T09:00:00+08:00", "valid_until": "2027-02-01T09:00:00+08:00", "technician": "cal-tech-1"},
+    {"channel_id": "cell-3", "signal": "voltage", "gain": 0.998, "offset": 0.01, "calibrated_at": "2026-08-01T09:00:00+08:00", "valid_until": "2027-02-01T09:00:00+08:00", "technician": "cal-tech-1"},
+    {"channel_id": "cell-3", "signal": "chloride", "gain": 1.02, "offset": -0.01, "calibrated_at": "2026-08-01T09:00:00+08:00", "valid_until": "2027-02-01T09:00:00+08:00", "technician": "cal-tech-2"},
+    {"channel_id": "cell-3", "signal": "temperature", "gain": 1.0, "offset": 0.0, "calibrated_at": "2026-08-01T09:00:00+08:00", "valid_until": "2027-02-01T09:00:00+08:00", "technician": "cal-tech-2"},
+    {"channel_id": "cell-2", "signal": "current", "gain": 1.0, "offset": 0.0, "calibrated_at": "2026-08-01T09:00:00+08:00", "valid_until": "2027-02-01T09:00:00+08:00", "technician": "cal-tech-1"},
+    {"channel_id": "cell-2", "signal": "chloride", "gain": 1.01, "offset": 0.0, "calibrated_at": "2025-12-01T09:00:00+08:00", "valid_until": "2026-06-01T09:00:00+08:00", "technician": "cal-tech-2"}
+  ]
+}

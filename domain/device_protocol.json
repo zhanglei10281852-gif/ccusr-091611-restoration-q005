@@ -1,0 +1,23 @@
+{
+  "protocol_version": "1.0",
+  "channels": [
+    {"channel_id": "cell-1", "description": "一号电解槽"},
+    {"channel_id": "cell-2", "description": "二号电解槽"},
+    {"channel_id": "cell-3", "description": "三号电解槽"}
+  ],
+  "signals": {
+    "current": {"unit": "A", "source": "power_supply", "description": "电源输出电流"},
+    "voltage": {"unit": "V", "source": "power_supply", "description": "电源输出电压"},
+    "chloride": {"unit": "mg/L", "source": "solution_sensor", "description": "溶液氯离子浓度"},
+    "temperature": {"unit": "C", "source": "solution_sensor", "description": "溶液温度"},
+    "heartbeat": {"unit": "none", "source": "power_supply", "description": "电源心跳"}
+  },
+  "heartbeat": {
+    "interval_s": 5,
+    "timeout_s": 15,
+    "escalation_s": 600
+  },
+  "required_signals_for_treatment": ["current", "voltage", "chloride", "temperature"],
+  "reading_freshness_s": 60,
+  "command_rule": "所有设备命令与控制台动作必须携带幂等键；网络重试使用同一键，重复键只执行一次"
+}

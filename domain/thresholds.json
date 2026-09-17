@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "default_severe_interlock": "supervisor_reset",
+  "phases": {
+    "ramping": {
+      "current": {
+        "kind": "ramp_curve",
+        "margin_A": 0.2,
+        "ceiling_factor": 1.1,
+        "warn_over_limit_A": 0.0,
+        "alarm_over_limit_A": 0.2,
+        "severe_above_A": 3.0,
+        "severe_interlock": "emergency_lock"
+      },
+      "voltage": {"kind": "above", "warn_above": 12.0, "alarm_above": 13.0, "severe_above": 15.0},
+      "temperature": {"kind": "above", "warn_above": 35.0, "alarm_above": 40.0, "severe_above": 45.0}
+    },
+    "steady": {
+      "current": {
+        "kind": "deviation",
+        "warn_deviation_A": 0.15,
+        "alarm_deviation_A": 0.3,
+        "severe_above_A": 3.0,
+        "severe_interlock": "emergency_lock"
+      },
+      "voltage": {"kind": "above", "warn_above": 12.0, "alarm_above": 13.0, "severe_above": 15.0},
+      "temperature": {"kind": "above", "warn_above": 35.0, "alarm_above": 40.0, "severe_above": 45.0}
+    },
+    "paused": {
+      "current": {
+        "kind": "above",
+        "alarm_above": 0.2,
+        "severe_above": 3.0,
+        "severe_interlock": "emergency_lock"
+      }
+    },
+    "rinsing": {
+      "current": {
+        "kind": "above",
+        "severe_above": 3.0,
+        "severe_interlock": "emergency_lock"
+      },
+      "temperature": {"kind": "above", "warn_above": 35.0, "alarm_above": 40.0, "severe_above": 45.0}
+    }
+  }
+}
